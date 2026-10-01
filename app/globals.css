@@ -1,0 +1,242 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/*  Harmony Solutions — tokens                                         */
+/* ------------------------------------------------------------------ */
+@theme {
+  --color-night: #07182e;
+  --color-night-2: #0c2340;
+  --color-night-3: #10294a;
+  --color-paper: #f5f2ec;
+  --color-paper-2: #ece7de;
+  --color-gold: #c7a45a;
+  --color-gold-soft: #d9bf86;
+  --color-gold-deep: #7d5f22;
+  --color-mist: #a7afb8;
+  --color-ink: #111827;
+
+  --font-serif: var(--font-display), "Iowan Old Style", "Times New Roman", serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Échelle typographique (rapport ~1.333, titres éditoriaux) */
+@utility display-xxl {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(3.4rem, 10.5vw, 11.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+}
+@utility display-xl {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.9rem, 7.2vw, 7.75rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+@utility display-l {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 4.8vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+}
+@utility display-m {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 3vw, 3.1rem);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+}
+@utility display-s {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+@utility lede {
+  font-size: clamp(1.06rem, 1.25vw, 1.25rem);
+  line-height: 1.6;
+}
+@utility meta {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+@utility num {
+  font-family: var(--font-serif);
+  font-variant-numeric: lining-nums;
+  color: var(--color-gold);
+}
+
+@utility container-x {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 1480px;
+  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+/* Lien souligné or, apparition du trait au survol */
+@utility link-line {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 0.45s var(--ease-out-soft);
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    background: var(--color-night);
+  }
+  body {
+    background: var(--color-night);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-night);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  img {
+    max-width: 100%;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* Entrée au chargement : le contenu reste visible dès le premier rendu
+   (pas d’opacité 0), seul un léger mouvement est animé. Meilleur LCP. */
+@keyframes hs-rise {
+  from {
+    transform: translate3d(0, 0.45em, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes hs-lift {
+  from {
+    transform: translate3d(0, 36px, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes hs-page {
+  from {
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+.hs-page {
+  animation: hs-page 0.6s var(--ease-out-soft) both;
+}
+.hs-rise {
+  animation: hs-rise 0.95s var(--ease-out-soft) both;
+}
+.hs-lift {
+  animation: hs-lift 1.2s var(--ease-out-soft) both;
+}
+
+/* Apparitions au défilement (activées seulement si JS est disponible) */
+.js [data-reveal="lines"] > span > span {
+  transform: translate3d(0, 108%, 0);
+  transition: transform 0.85s var(--ease-out-soft) var(--d, 0s);
+}
+.js [data-reveal="crop"] {
+  clip-path: inset(14% 0% 0% 0%);
+  transform: translate3d(0, 32px, 0);
+  transition:
+    clip-path 1.05s var(--ease-out-soft) var(--d, 0s),
+    transform 1.05s var(--ease-out-soft) var(--d, 0s);
+}
+.js [data-reveal="rise"] {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 0.8s var(--ease-out-soft) var(--d, 0s),
+    transform 0.8s var(--ease-out-soft) var(--d, 0s);
+}
+.js [data-reveal="lines"].is-in > span > span,
+.js [data-reveal].is-in {
+  transform: none;
+  clip-path: inset(0);
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal="lines"] > span > span,
+  .js [data-reveal] {
+    transform: none !important;
+    clip-path: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Numéros or : version foncée sur fonds clairs (contraste AA) */
+.bg-paper .num {
+  color: var(--color-gold-deep);
+}
+
+/* Curseur « Voir » : on masque le curseur natif uniquement sur les visuels */
+@media (pointer: fine) {
+  [data-cursor] {
+    cursor: none;
+  }
+  [data-cursor] a,
+  [data-cursor] button {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Barre de défilement discrète */
+@supports (scrollbar-color: auto) {
+  html {
+    scrollbar-color: #2a3d58 var(--color-night);
+    scrollbar-width: thin;
+  }
+}
